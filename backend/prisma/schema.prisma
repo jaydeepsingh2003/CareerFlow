@@ -1,0 +1,311 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String          @id @default(uuid())
+  email         String          @unique
+  passwordHash  String
+  role          String          @default("USER")
+  emailVerified Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?
+  auditLogs     AuditLog[]
+  eventLogs     EventLog[]
+  jobTracking   JobTracking[]
+  interviews    MockInterview[]
+  notifications Notification[]
+  prepPlans     PrepPlan[]
+  profile       Profile?
+  readiness     ReadinessScore?
+  resumes       Resume[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model Profile {
+  id          String      @id @default(uuid())
+  userId      String      @unique
+  firstName   String
+  lastName    String
+  headline    String?
+  bio         String?
+  location    String?
+  avatarUrl   String?
+  socialLinks String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills      UserSkill[]
+
+  @@map("profiles")
+}
+
+model Skill {
+  id             String      @id @default(uuid())
+  name           String      @unique
+  category       String?
+  normalizedName String      @unique
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  userSkills     UserSkill[]
+
+  @@index([category])
+  @@map("skills")
+}
+
+model UserSkill {
+  id        String   @id @default(uuid())
+  profileId String
+  skillId   String
+  level     Int      @default(1)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  skill     Skill    @relation(fields: [skillId], references: [id])
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, skillId])
+  @@map("user_skills")
+}
+
+model JobPosting {
+  id           String        @id @default(uuid())
+  externalId   String
+  title        String
+  company      String
+  location     String
+  description  String
+  salary       String?
+  source       String
+  applyUrl     String
+  postedAt     DateTime      @default(now())
+  embeddingId  String?
+  status       String        @default("OPEN")
+  jobHash      String?       @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+  requirements String?
+  embedding    JobEmbedding?
+  jobTracking  JobTracking[]
+  prepPlans    PrepPlan[]
+  roundMap     RoundMap?
+
+  @@index([externalId])
+  @@index([source])
+  @@index([createdAt])
+  @@index([status])
+  @@map("job_postings")
+}
+
+model JobEmbedding {
+  id        String     @id @default(uuid())
+  jobId     String     @unique
+  vectorId  String     @unique
+  updatedAt DateTime   @updatedAt
+  job       JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("job_embeddings")
+}
+
+model JobTracking {
+  id           String     @id @default(uuid())
+  userId       String
+  jobId        String
+  status       String     @default("SAVED")
+  score        Float?     @default(0)
+  matchDetails String?
+  explanation  String?
+  appliedAt    DateTime?
+  appliedVia   String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  job          JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId, status])
+  @@index([jobId, score(sort: Desc)])
+  @@map("job_tracking")
+}
+
+
+model PrepPlan {
+  id          String     @id @default(uuid())
+  jobId       String
+  userId      String
+  generatedAt DateTime   @default(now())
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job         JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  tasks       PrepTask[]
+
+  @@unique([userId, jobId])
+  @@map("prep_plans")
+}
+
+model PrepTask {
+  id          String   @id @default(uuid())
+  planId      String
+  title       String
+  description String?
+  resources   String?
+  isCompleted Boolean  @default(false)
+  order       Int      @default(0)
+  plan        PrepPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+  @@map("prep_tasks")
+}
+
+model RoundMap {
+  id        String     @id @default(uuid())
+  jobId     String     @unique
+  rounds    String
+  createdAt DateTime   @default(now())
+  job       JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("round_maps")
+}
+
+model ReadinessScore {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  currentScore Float
+  history      String?
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("readiness_scores")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String   @default("INFO")
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model EventLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  type      String
+  metadata  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([type, createdAt])
+  @@map("event_logs")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  entityId   String
+  entityType String
+  action     String
+  changes    String?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([entityId, entityType])
+  @@map("audit_logs")
+}
+
+model MockInterview {
+  id        String              @id @default(uuid())
+  userId    String
+  jobId     String?
+  jobTitle  String
+  status    String              @default("STARTED")
+  score     Float?
+  feedback  String?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  questions InterviewQuestion[]
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("mock_interviews")
+}
+
+model InterviewQuestion {
+  id           String        @id @default(uuid())
+  interviewId  String
+  questionText String
+  userAnswer   String?
+  aiFeedback   String?
+  score        Float?
+  order        Int           @default(0)
+  interview    MockInterview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  @@index([interviewId])
+  @@map("interview_questions")
+}
+
+model Resume {
+  id          String          @id @default(uuid())
+  userId      String
+  title       String?
+  fileUrl     String?
+  textContent String?
+  status      String          @default("DRAFT")
+  version     Int             @default(1)
+  data        String?         // Complete JSON of the resume data
+  template    String          @default("executive")
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+  assessment  ATSAssessment?
+  sections    ResumeSection[]
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("resumes")
+}
+
+model ResumeSection {
+  id       String @id @default(uuid())
+  resumeId String
+  type     String
+  content  String
+  order    Int    @default(0)
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@map("resume_sections")
+}
+
+model ATSAssessment {
+  id                  String   @id @default(uuid())
+  resumeId            String   @unique
+  overallScore        Float
+  skillOverlap        Float?
+  similarityScore     Float?
+  quantificationScore Float?
+  keywordsMatched     String?
+  missingKeywords     String?
+  suggestions         String?
+  formattingScore     Float?
+  confidence          Float?
+  summary             String?
+  createdAt           DateTime @default(now())
+  resume              Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@map("ats_assessments")
+}

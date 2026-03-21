@@ -1,0 +1,303 @@
+AI-Powered Adaptive Onboarding Platform
+Static, one-size-fits-all onboarding wastes time. The goal is to build an AI engine that reads a new hire’s
+resume and job description, identifies the skill gaps, and generates a customized training path. This idea is
+already showing up in recent AI-education projects – for example, one open-source system “generates
+personalized learning paths powered by AI” with a React+Flask stack , and tools like ResuMasters extract
+resume skills and suggest upskilling . In our solution, we’ll harness free data (like the O*NET skills
+database ), open-source models and APIs, and a clean web interface to deliver a career-specific learning
+roadmap. Below is a full breakdown of requirements, related work, proposed features and architecture, an
+implementation timeline with tech choices, and a prototype plan using free resources.
+Requirements Summary
+The hackathon specifies an AI-driven learning engine with these core capabilities (summarized from the
+provided brief):
+Skill Extraction (Intelligent Parsing):  Parse a resume and a job description to extract key skills and
+proficiency levels. (E.g. NLP or LLM-based parsing to list skills from each document.)
+Gap Analysis & Mapping:  Compare the candidate’s skills to the job’s required skills, identifying the
+“skill gap.” Then dynamically generate a personalized learning pathway  that fills those gaps. 
+Web Interface:  A minimal but clear web UI where a user uploads a resume and JD and sees the
+resulting custom training roadmap visualized. (This must be functional – e.g. a simple React/HTML
+form with results.)
+Adaptive Logic:  Implement original adaptive logic (graph-based or knowledge-tracing algorithm) to
+sequence the training modules for optimal learning. Pretrained models can be used for language
+tasks, but the path-planning logic must be our design.
+Traceability:  Provide an optional reasoning trace or log of how the system made its decisions
+(important for transparency per the criteria).
+Evaluation Goals:  The solution should reduce redundant training and cover role-specific content,
+work across different job categories, avoid AI “hallucination” by grounding in real curricula, and be
+well-documented for judges.
+Survey of Existing Solutions
+Several existing projects point the way for this problem:
+ResuMasters (GitHub):  An AI resume analyzer built for a hackathon. It uses LLMs to extract info
+from resumes and JDs and provides feedback. Its features include “Skill Gap Analysis: Identifies missing
+skills or experiences and offers recommendations for skill development” . This aligns directly with our
+gap-analysis step. ResuMasters shows how to leverage GPT (or similar) to match resumes to job
+requirements and suggest improvements.
+AI Learning Path Generator (GitHub):  A production-ready full-stack app that “generates
+personalized learning paths powered by AI.” It uses a React/Vite frontend and Flask backend with1
+2
+3
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+• 
+1
+background workers . It even integrates OpenAI and a vector database to create customized
+educational roadmaps (incorporating user preferences and real-time market data) . Though
+focused on general education rather than onboarding, it demonstrates the tech stack and workflow
+of an AI-driven learning platform.
+LearnPath.AI (Devpost):  An AI career coach project that “reads your resume, asks 5 deep questions,
+and in 60 seconds diagnoses exactly what's blocking your learning. It builds a visual personalized
+roadmap” . LearnPath.AI is notable for combining resume analysis with a lightweight interview to
+pinpoint gaps, then matching those to specific resources (even YouTube timestamps). It’s a practical
+model of turning a resume into targeted learning recommendations.
+Skill and Course Recommenders:  Tools like Google’s Career Coach or some LMS platforms try to
+recommend courses based on profiles. (No direct citation.) Many academic papers and industry
+blogs discuss “adaptive onboarding” or “AI in learning.” For example, a DigiEduHack education
+challenge explicitly lists “adaptive onboarding programs for new employees”  as a key use case .
+These examples show that our concept is well-grounded in ongoing innovation.
+These examples illustrate what others have done: extract skills with NLP/LLMs, use AI to generate learning
+paths, and offer polished UIs. We’ll combine these ideas but ensure our Adaptive Pathing  logic is original
+(as required) and focus on zero-cost tech choices.
+Proposed Features & Architecture
+We propose a modular system with the following unique features and components:
+Document Parsing and NLP:
+Use OCR/Text extraction (PyMuPDF or PDF libraries) for resumes in PDF/Word. 
+Apply NLP (spaCy, Hugging Face Transformers, or fine-tuned models) to identify relevant phrases:
+skills, certifications, education, job titles, and experience levels. Pretrained NER or keyword matching
+(with tech skill lexicons from O*NET) can tag skills in text. 
+Similarly parse the target job description to list required skills, responsibilities, and role level.
+Skill Matching & Gap Identification:
+Compare the two skill sets. Compute which required skills the candidate lacks or rates lower . This can
+be a fuzzy match (embedding similarity) rather than exact text. (For example, use a
+SentenceTransformer to embed skills and calculate similarity between candidate skills and JD skills.) 
+The output is a skill gap list.  Each missing skill or underdeveloped area is a node we need to address.
+Adaptive Path Planning:
+Knowledge Graph Model:  Build or use an existing skill graph (e.g. from O*NET or curated) where
+nodes are skills/modules and edges indicate prerequisite relationships. Each job role might map to
+certain goal nodes. We can then compute an optimal path through this graph that covers all gaps
+with minimal redundancy. Graph algorithms (like shortest path, topological sort) can sequence the
+modules logically. 
+Graph-Based or Tracing Algorithm:  As suggested, we might implement a graph search or
+knowledge-tracing algorithm. For instance, treat each missing skill as a goal, then plan a sequence of1
+4
+• 
+5
+• 
+6
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+training modules that build up the skill hierarchy. This meets the requirement for original adaptive
+logic. 
+LLM-assisted Sequencing:  Optionally, we can prompt an LLM (GPT-4o/GPT-3.5 or an open model)
+with the list of gaps and ask it to propose an ordered curriculum drawn strictly from our course
+catalog. But the core logic should rely on our graph model to avoid hallucinations.
+Course/Curriculum Mapping:
+Maintain or retrieve a catalog of training resources (courses, videos, tutorials) tagged by skill. This
+could be a simple database of (skill → recommended course) entries. We could seed it with open
+resources (e.g. top Coursera/edX/Udemy courses, or free YouTube playlists) and align them to
+O*NET skills. 
+To avoid cost, we’ll focus on free courses or content: YouTube tutorials, free MOOCs (audit mode),
+open textbooks, etc. 
+The system maps each gap skill to a module or a set of resources. This could be done via keyword
+matching or embeddings between the skill and course descriptions.
+Functional Web Interface:
+Frontend:  A simple React or Next.js app (hosted free on Vercel/Netlify) with an upload form for
+resume and JD. Display the resulting learning path in a clean list or graphical timeline. Possibly allow
+download of the plan PDF. 
+Backend/API:  A lightweight REST API (Python Flask/FastAPI or Node.js Express) on a free tier host
+(e.g. Render , Railway, or Heroku free tier) that handles the parsing and computation. 
+The frontend calls the API (e.g. POST files), then polls for results (or waits synchronously if quick). The
+backend returns JSON of skill gaps and recommended modules. 
+We’ll  visualize  the  learning  path  as  a  sequence  of  steps  (e.g.  numbered  modules  with  titles,
+descriptions, and links). A minimal dash or line chart could show progress. Emphasize clarity and
+ease of use to score well on UX.
+Traceability/Logging:
+Keep an internal log of decisions (e.g. “Skill X mapped to Course Y because…”). We can expose these
+as a toggle or in a “details” panel. This satisfies the “reasoning trace” criterion. 
+Ensure all external data/model sources (datasets, LLMs) are documented per the rules.
+Cross-Domain Scalability:
+The skill matching should not be hardcoded for one field. By using O*NET (a universal job-skill
+taxonomy ) and embedding models, our system can handle technical, desk, or manual roles. We’ll
+validate with a few varied examples (e.g., software engineer vs. warehouse operator).
+Deployment & DevOps:• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+• 
+3
+Use Docker for environment reproducibility (optional but recommended). Provide a Dockerfile so
+judges can run locally if needed. 
+Host on a free cloud environment: e.g. backend on Render (free tier for hobby), frontend on Vercel.
+Use free databases (SQLite or free-plan PostgreSQL on Render). For vector store, Chroma DB has a
+free local mode, or we could use an in-memory FAISS via Python. 
+Continuous integration via GitHub Actions is optional.
+In summary, the platform stacks free technologies (React, Node/Python, Flask/FastAPI, spaCy/Transformers,
+Chroma/FAISS, and free hosting) to deliver a seamless adaptive onboarding tool. We leverage known open
+datasets (O*NET)  and models (e.g. Llama or GPT-3.5 via free API calls) to avoid costs. The unique part is
+our adaptive path logic (graph planning) and a polished yet simple interface.
+Implementation Roadmap (with Tech Stack & Timeline)
+Data Gathering (Week 1):  Download the O*NET database  (free skills taxonomy), and fetch a
+resume corpus (Kaggle has free resume datasets). Gather sample job descriptions (Kaggle jobs
+dataset or scraped). 
+Output:  Local database of skills, some example resumes/JDs for development.
+Skill Extraction Prototype (Weeks 2–3):
+Build a basic parser: use Python (spaCy or NLTK) or Hugging Face NLP to identify skills. If time, fine-
+tune a named-entity model on resume/skill labels or prompt an LLM to list skills. 
+Test on the sample data. Iterate until the parser reliably pulls out known skill terms. 
+Output:  A function/API endpoint extract_skills(text) → [skill, level] .
+Gap Analysis Engine (Week 4):
+Implement logic to compare two skill lists (resume vs JD). Use embeddings (SentenceTransformers)
+to catch synonyms (e.g., “JS” vs “JavaScript”). 
+Generate a ranked list of missing skills or weak areas. 
+Output:  A JSON of identified skill gaps for each input pair .
+Curriculum Mapping (Weeks 5–6):
+Build or source a small catalog of training modules (e.g., key online courses or modules tagged by
+skill). This could be a CSV or database table. 
+Develop the adaptive pathing: create a simple graph of prerequisites (could start with linear: one
+course per skill). Then improve by linking related skills (perhaps by O*NET’s “Skill-Level” data). 
+Optionally call an LLM in a limited way: e.g. “Given skill gaps X, Y, Z, list the top 5 free courses to learn
+these.” Use its output but cross-check with known courses. 
+Output:  A mapping function plan_learning_path(gaps) → [ordered modules] .
+Web UI and Integration (Weeks 7–8):• 
+• 
+• 
+3
+1. 3
+2. 
+3. 
+4. 
+5. 
+6. 
+7. 
+8. 
+9. 
+10. 
+11. 
+12. 
+13. 
+14. 
+15. 
+16. 
+4
+Backend API:  Set up Flask or FastAPI. Endpoints: /upload  (accept files), /status , /result .
+Handle file storage, call extraction and planning functions. 
+Frontend:  Simple React app with file inputs (drag-drop). On submit, call backend and show loading
+indicator . After processing, display the skill gaps and learning path in an easy-to-read format
+(timeline or list). 
+Add basic styling (e.g. Bootstrap or Tailwind) for usability. Use charts or icons to illustrate progress if
+time. 
+Output:  A working demo (hosted) where one can test with different resumes/JDs and see custom
+plans.
+Refinement and Testing (Weeks 9–10):
+Test with various resume styles and job types. Fix mis-parses or ordering issues. 
+Ensure no hallucinations: verify every suggested course is relevant (using strict prompts or filtering). 
+Polish the reasoning trace feature: e.g., click a “Why this path?” to reveal our steps. 
+Add any bonus features as time permits (e.g. user login, save paths, chat interface, etc.). 
+Output:  A stable prototype matching all hackathon criteria.
+Tech Stack:  React (frontend), Flask/FastAPI (backend), Python spaCy/Transformers (NLP), Chroma or FAISS
+(vector search), PostgreSQL or SQLite (data), hosted on Vercel/Render/Heroku. Use Docker to encapsulate
+the environment.
+Prototype Plan & Free Resources
+To keep it free, we’ll use open-source tools and data:
+Models & APIs:  Use free-tier LLMs (GPT-3.5-turbo via OpenAI’s free credits or Llama 3 / Mistral via
+Hugging Face). SentenceTransformers (all free) for embeddings. No paid licenses.
+Data:  O*NET database (free CC license)  for skill taxonomy. Kaggle’s free resume and jobs
+datasets. Course/resource info scraped from public sites (e.g., Wikipedia lists of courses, YouTube
+channels).
+Hosting:  Vercel/Netlify for frontend (free static hosting). Render or Railway free tier for backend.
+GitHub Pages could serve static parts.
+Dev Tools:  Python (open-source libraries), Node/JavaScript (React), GitHub for version control,
+GitHub Actions for CI (all free).
+Visualization:  Libraries like Chart.js or D3 (open-source) if needed for path UI. 
+Workflow:
+Build a GitHub repo, track issues for tasks. 
+Code the backend logic and deploy as an API on Render (their free plan supports small apps). 
+Develop the React UI locally, then deploy on Vercel (free hobby plan) or Netlify.
+Document everything in README (setup, usage, data sources, algorithm overview).
+Prepare a 2–3min demo video (screen-record the UI, highlight how paths adapt to different input)
+and a 5-slide deck (outline solution, architecture, stack, algorithms, datasets).
+Free Datasets & Content:
+Kaggle “Resume Dataset” (snehaanbhawal) for various resume formats. 
+Kaggle or O*NET job listings for target roles. 17. 
+18. 
+19. 
+20. 
+21. 
+22. 
+23. 
+24. 
+25. 
+26. 
+• 
+• 3
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+5
+For courses: use free MOOCs (edX, Coursera audit) and YouTube (via transcripts). Could even use
+YouTube Data API (free limited quota) to find video courses. 
+All code and models on GitHub (fully open).
+In summary, the platform uses no paid services: all code and data are open-source or CC-licensed (O*NET
+specifically ),  models  are  free  or  open  weights,  and  hosting  is  on  free  tiers.  The  result  will  be  a
+deployable  prototype  (e.g.  GitHub  +  Vercel/Render)  plus  documentation  covering  everything  from  skill
+extraction to the adaptive path algorithm. 
+Sources:  Our approach is informed by existing tools and documentation , but the final
+design and code will be original and self-contained. All external resources (models, datasets) will be cited in
+the  README  as  required.  This  solution  should  meet  the  hackathon’s  criteria  with  a  clear  UI,  robust
+algorithms, and thorough documentation.
+GitHub - arun3676/ai-learning-path-generator: An intelligent learning system combining RAG
+(Retrieval Augmented Generation) with adaptive path generation for personalized AI education · GitHub
+https://github.com/arun3676/ai-learning-path-generator
+GitHub - nekronos-gh/ResuMasters: AI Resume Analyzer that exploits the power of Large Language
+Models to revolutionize the job application process. · GitHub
+https://github.com/nekronos-gh/ResuMasters
+O*NET Database at O*NET Resource Center
+https://www.onetcenter .org/database.html
+LearnPath.AI | Devpost
+https://devpost.com/software/learnpath-ai-gq7ypn
+AI-Powered Learning: Personalisation at Scale - DigiEduHack 2025
+https://digieduhack.com/challenges/ai-powered-learning-personalization-at-scale• 
+• 
+3
+2 1 4 5 3
+1 4
+2
+3
+5
+6
+6
