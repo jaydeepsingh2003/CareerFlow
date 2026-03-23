@@ -14,15 +14,9 @@ services:
           name: careerflow-db
           property: connectionString
       - key: REDIS_HOST
-        fromService:
-          type: redis
-          name: careerflow-redis
-          property: host
+        sync: false # User to provide from manual Redis instance
       - key: REDIS_PORT
-        fromService:
-          type: redis
-          name: careerflow-redis
-          property: port
+        sync: false # User to provide from manual Redis instance
       - key: GEMINI_API_KEY
         sync: false
       - key: JWT_SECRET
@@ -30,8 +24,4 @@ services:
 
 databases:
   - name: careerflow-db
-    plan: free
-
-redises:
-  - name: careerflow-redis
     plan: free
