@@ -31,9 +31,7 @@ services:
 databases:
   - name: careerflow-db
     plan: free
-    postgresRole: user
 
 redises:
   - name: careerflow-redis
     plan: free
-    ipAllowList: [] # Only allow internal access
