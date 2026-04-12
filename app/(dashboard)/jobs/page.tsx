@@ -122,7 +122,7 @@ function JobsPageContent() {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] -z-10" />
                             <div className="space-y-3">
                                 <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter flex items-center gap-4">
-                                    QUANTUM FEED
+                                    JOB FEED
                                     <Badge className="bg-primary hover:bg-primary text-[10px] h-6 rounded-lg px-3 border-none flex items-center gap-1.5">
                                         <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
                                         LIVE
@@ -131,10 +131,10 @@ function JobsPageContent() {
                                 <div className="flex flex-wrap items-center gap-4">
                                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
                                         <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                                        <span className="text-[10px] uppercase tracking-widest text-white/70 font-black">Sync Frequency: 60s</span>
+                                        <span className="text-[10px] uppercase tracking-widest text-white/70 font-black">Updates every 60s</span>
                                     </div>
                                     <p className="text-sm text-muted-foreground font-medium">
-                                        Displaying {jobs.length} high-fidelity opportunities mapped to your DNA.
+                                        Showing {jobs.length} jobs matched to your skills.
                                     </p>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@ function JobsPageContent() {
                                 onClick={() => refetch()}
                                 className="border-white/10 bg-white/5 text-white rounded-2xl h-14 px-8 hover:bg-white/10 hover:border-primary/50 transition-all font-black group shadow-2xl shrink-0"
                             >
-                                <History className="h-5 w-5 mr-3 group-hover:rotate-180 transition-transform duration-700 text-primary" /> REFRESH MATRIX
+                                <History className="h-5 w-5 mr-3 group-hover:rotate-180 transition-transform duration-700 text-primary" /> REFRESH JOBS
                             </Button>
                         </div>
 
@@ -157,8 +157,8 @@ function JobsPageContent() {
                                     </div>
                                 </div>
                                 <div className="text-center space-y-2">
-                                    <p className="text-2xl font-black text-white tracking-widest uppercase italic">Resonating...</p>
-                                    <p className="text-xs text-muted-foreground tracking-widest uppercase font-bold opacity-50">Calculating matching coefficients across 14.2k nodes</p>
+                                    <p className="text-2xl font-black text-white tracking-widest uppercase">Searching...</p>
+                                    <p className="text-xs text-muted-foreground tracking-widest uppercase font-bold opacity-50">Looking for the best jobs for you...</p>
                                 </div>
                             </div>
                         ) : (
@@ -188,16 +188,16 @@ function JobsPageContent() {
                                             <div className="bg-white/5 h-24 w-24 rounded-full flex items-center justify-center mx-auto mb-8">
                                                 <Search className="h-10 w-10 text-muted-foreground/30" />
                                             </div>
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tighter uppercase">No Signals Detected</h3>
+                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tighter uppercase">No Jobs Found</h3>
                                             <p className="text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                                                Your current filters are too restrictive for the matrix. Try expanding your search horizons.
+                                                Your filters are too strict. Try changing them to see more jobs.
                                             </p>
                                             <Button
                                                 variant="outline"
                                                 className="mt-10 border-primary/50 text-primary hover:bg-primary/10 rounded-2xl px-10 h-14 font-black transition-all"
                                                 onClick={() => useJobFilterStore.getState().resetFilters()}
                                             >
-                                                RESET ALL PROTOCOLS
+                                                RESET FILTERS
                                             </Button>
                                         </motion.div>
                                     )}
@@ -215,8 +215,8 @@ function JobsPageContent() {
                                             {isFetchingNextPage ? (
                                                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
                                             ) : (
-                                                <span className="flex items-center gap-3 italic uppercase tracking-widest text-sm">
-                                                    Load More Opportunities <ChevronDown className="h-5 w-5 group-hover:translate-y-2 transition-transform text-primary" />
+                                                <span className="flex items-center gap-3 uppercase tracking-widest text-sm">
+                                                    Load More Jobs <ChevronDown className="h-5 w-5 group-hover:translate-y-2 transition-transform text-primary" />
                                                 </span>
                                             )}
                                         </Button>

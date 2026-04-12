@@ -102,6 +102,7 @@ export const api = {
         getSystemStats: () => apiClient.get('/analytics/system-stats'),
         getMatchDistribution: () => apiClient.get('/analytics/match-distribution'),
         getDashboard: (userId: string) => apiClient.get(`/analytics/dashboard/${userId}`),
+        getUserActivity: (userId: string) => apiClient.get(`/analytics/user-activity/${userId}`),
         getTrends: (userId: string) => apiClient.get(`/analytics/trends/${userId}`),
         getFunnel: (userId: string) => apiClient.get(`/analytics/funnel/${userId}`),
     },

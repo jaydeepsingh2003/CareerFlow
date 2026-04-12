@@ -64,16 +64,16 @@ export default function JobAlignmentClient() {
                     className="inline-flex items-center justify-center space-x-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary mb-6"
                 >
                     <Sparkles className="w-4 h-4" />
-                    <span className="text-xs font-black tracking-widest uppercase">Llama-3.3 Intelligence</span>
+                    <span className="text-xs font-black tracking-widest uppercase">AI Matcher</span>
                 </motion.div>
                 
                 <motion.h1 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="text-5xl md:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent uppercase italic"
+                    className="text-5xl md:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent uppercase"
                 >
-                    Resume Alignment <span className="text-primary not-italic">Matrix</span>
+                    Job <span className="text-primary">Matcher</span>
                 </motion.h1>
                 
                 <motion.p 
@@ -82,7 +82,7 @@ export default function JobAlignmentClient() {
                     transition={{ delay: 0.2 }}
                     className="text-lg text-neutral-500 max-w-2xl mx-auto font-medium"
                 >
-                    Upload your profile to trigger a high-fidelity cross-reference across Adzuna & The Muse global job registries.
+                    Upload your resume and let our AI find the best jobs for you.
                 </motion.p>
             </header>
 
@@ -93,9 +93,9 @@ export default function JobAlignmentClient() {
                         <section className="glass-panel p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl -z-10" />
                             
-                            <h2 className="text-xl font-black mb-8 flex items-center tracking-tighter uppercase italic">
+                            <h2 className="text-xl font-black mb-8 flex items-center tracking-tighter uppercase">
                                 <FileText className="w-5 h-5 mr-3 text-primary" />
-                                1. Source Profile
+                                1. Upload Resume
                             </h2>
                             
                             <div 
@@ -115,15 +115,15 @@ export default function JobAlignmentClient() {
                                             <CheckCircle className="w-8 h-8 text-primary" />
                                         </div>
                                         <p className="font-bold text-white truncate max-w-full italic">{resumeFile.name}</p>
-                                        <p className="text-[10px] text-neutral-500 uppercase font-black tracking-widest mt-2">Vectorized Ready</p>
+                                        <p className="text-[10px] text-neutral-500 uppercase font-black tracking-widest mt-2">Ready to Analyze</p>
                                     </div>
                                 ) : (
                                     <div className="flex flex-col items-center">
                                         <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                                             <UploadCloud className="w-8 h-8 text-neutral-400 group-hover:text-primary transition-colors" />
                                         </div>
-                                        <p className="font-bold text-neutral-300 uppercase tracking-tighter">Initialize Upload</p>
-                                        <p className="text-[10px] text-neutral-500 mt-2 font-black tracking-widest uppercase italic">X-PDF ONLY</p>
+                                        <p className="font-bold text-neutral-300 uppercase tracking-tighter">Click to Upload</p>
+                                        <p className="text-[10px] text-neutral-500 mt-2 font-black tracking-widest uppercase">PDF ONLY</p>
                                     </div>
                                 )}
                             </div>
@@ -131,16 +131,16 @@ export default function JobAlignmentClient() {
                             <Button
                                 onClick={handleAnalyze}
                                 disabled={isAnalyzing || !resumeFile}
-                                className="w-full mt-8 h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest italic transition-all active:scale-95 disabled:opacity-50"
+                                className="w-full mt-8 h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
                             >
                                 {isAnalyzing ? (
                                     <>
                                         <Loader2 className="w-5 h-5 mr-3 animate-spin" />
-                                        MAPPING MATRIX...
+                                        FINDING JOBS...
                                     </>
                                 ) : (
                                     <>
-                                        ANALYZE & FIND JOBS
+                                        FIND JOBS
                                         <Search className="w-5 h-5 ml-3" />
                                     </>
                                 )}
@@ -153,16 +153,16 @@ export default function JobAlignmentClient() {
                             </h3>
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center text-xs">
-                                    <span className="text-neutral-500 font-bold">ADZUNA ENGINE</span>
+                                    <span className="text-neutral-500 font-bold">ADZUNA JOBS</span>
                                     <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/10 border-none px-2 h-4 text-[9px] font-black">ACTIVE</Badge>
                                 </div>
                                 <div className="flex justify-between items-center text-xs">
-                                    <span className="text-neutral-500 font-bold">THE MUSE API</span>
+                                    <span className="text-neutral-500 font-bold">THE MUSE JOBS</span>
                                     <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/10 border-none px-2 h-4 text-[9px] font-black">ACTIVE</Badge>
                                 </div>
                                 <div className="flex justify-between items-center text-xs">
-                                    <span className="text-neutral-500 font-bold">LLAMA 3.3 70B</span>
-                                    <Badge className="bg-primary/10 text-primary hover:bg-primary/10 border-none px-2 h-4 text-[9px] font-black">REASONING</Badge>
+                                    <span className="text-neutral-500 font-bold">AI ASSISTANT</span>
+                                    <Badge className="bg-primary/10 text-primary hover:bg-primary/10 border-none px-2 h-4 text-[9px] font-black">ACTIVE</Badge>
                                 </div>
                             </div>
                         </section>
@@ -181,8 +181,8 @@ export default function JobAlignmentClient() {
                                         <Briefcase className="w-10 h-10 text-neutral-700" />
                                         <div className="absolute inset-0 border border-white/10 rounded-full animate-ping opacity-20" />
                                     </div>
-                                    <h3 className="text-3xl font-black text-neutral-300 mb-4 tracking-tighter uppercase italic">Registry Idle</h3>
-                                    <p className="text-neutral-500 max-w-sm mx-auto font-medium">Upload your resume to begin a deterministic matching cycle against live job feeds.</p>
+                                    <h3 className="text-3xl font-black text-neutral-300 mb-4 tracking-tighter uppercase">Ready</h3>
+                                    <p className="text-neutral-500 max-w-sm mx-auto font-medium">Upload your resume to search for jobs that match your skills.</p>
                                 </motion.div>
                             )}
 
@@ -200,10 +200,10 @@ export default function JobAlignmentClient() {
                                             <div className="absolute inset-4 border-r-2 border-primary/40 rounded-full animate-spin" style={{ animationDuration: '1s', animationDirection: 'reverse' }} />
                                             <Database className="absolute inset-0 m-auto w-10 h-10 text-primary animate-pulse" />
                                         </div>
-                                        <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase mb-4 animate-pulse">Analyzing Registry</h3>
+                                        <h3 className="text-4xl font-black text-white tracking-tighter uppercase mb-4 animate-pulse">Searching for Jobs</h3>
                                         <div className="space-y-2">
-                                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">Parsing Resume Buffers</p>
-                                            <p className="text-neutral-500 font-medium italic">Fetching live node data from Adzuna & Muse API core...</p>
+                                            <p className="text-neutral-400 font-bold uppercase tracking-widest text-xs">Reading your resume</p>
+                                            <p className="text-neutral-500 font-medium italic">Looking for jobs online...</p>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -217,10 +217,10 @@ export default function JobAlignmentClient() {
                                 >
                                     <div className="flex items-center justify-between mb-8 px-2">
                                         <div className="flex items-center gap-3">
-                                            <h2 className="text-2xl font-black uppercase tracking-tighter italic">Found {results.length} Matches</h2>
+                                            <h2 className="text-2xl font-black uppercase tracking-tighter">Found {results.length} Matches</h2>
                                             <Badge className="bg-primary hover:bg-primary text-[10px] font-black rounded-md px-2 py-0.5 border-none">TOP RANKED</Badge>
                                         </div>
-                                        <p className="text-[10px] font-black text-neutral-500 tracking-[0.2em] uppercase">High fidelity results</p>
+                                        <p className="text-[10px] font-black text-neutral-500 tracking-[0.2em] uppercase">Best Matches</p>
                                     </div>
 
                                     <div className="space-y-6">
@@ -242,7 +242,7 @@ export default function JobAlignmentClient() {
                                                             </svg>
                                                             <span className="absolute text-xl font-black text-white italic">{job.match_score}%</span>
                                                         </div>
-                                                        <span className="text-[9px] font-black text-neutral-500 uppercase tracking-widest mt-3">ALIGNMENT</span>
+                                                        <span className="text-[9px] font-black text-neutral-500 uppercase tracking-widest mt-3">MATCH</span>
                                                     </div>
 
                                                     {/* content column */}

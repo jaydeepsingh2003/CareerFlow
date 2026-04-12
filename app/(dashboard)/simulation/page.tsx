@@ -95,8 +95,8 @@ export default function SimulationPage() {
             <div className="max-w-7xl mx-auto space-y-6">
                 <div className="flex justify-between items-end mb-8">
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-white mb-2">Technical Simulation IDE</h1>
-                        <p className="text-gray-400">Complete the assigned coding challenge. Real-time deterministic sandbox execution.</p>
+                        <h1 className="text-3xl font-black tracking-tight text-white mb-2">Practice Tests</h1>
+                        <p className="text-gray-400">Practice your coding skills with these challenges.</p>
                     </div>
                 </div>
 
@@ -170,8 +170,8 @@ export default function SimulationPage() {
                             {!isFinished ? (
                                 <div className="pt-2">
                                     <p className="text-xs text-gray-500 leading-relaxed font-mono uppercase tracking-widest">
-                                        <span className="text-emerald-500 font-bold">● AWAITING COMPILATION</span> <br/>
-                                        Write the logic matching the desired outcome. Input will be validated instantly upon execution.
+                                        <span className="text-emerald-500 font-bold">● WAITING FOR CODE</span> <br/>
+                                        Write your code below. We will run it and check your answer right away.
                                     </p>
                                 </div>
                             ) : (
@@ -182,11 +182,11 @@ export default function SimulationPage() {
                                 >
                                     <div className={`p-4 rounded-xl border ${score === 100 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-red-500/10 border-red-500/30 text-red-400'}`}>
                                         <div className="flex items-center gap-2 font-bold mb-1">
-                                            <CheckCircle2 className="h-5 w-5" /> Evaluation Complete
+                                            <CheckCircle2 className="h-5 w-5" /> Check Complete
                                         </div>
                                         <div className="text-3xl font-black mb-1">{score}% SCORE</div>
                                         <p className="text-xs opacity-80">
-                                            {score === 100 ? "Logic executed flawlessly. All unit tests passed." : "Compilation failed or tests did not match expected output blocks."}
+                                            {score === 100 ? "Great job! All tests passed." : "Oops! There is an error in your code or it didn't pass the tests."}
                                         </p>
                                     </div>
                                     <button 
@@ -210,10 +210,10 @@ export default function SimulationPage() {
                                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500" />
                                      <h3 className="font-bold text-white mb-2 flex items-center gap-2">
                                         <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                                        Targeted Fix Required
+                                        Review Needed
                                     </h3>
                                      <p className="text-xs text-gray-400 mb-4 leading-relaxed">
-                                        Your execution was incomplete. Review this solution video specifically targeting <strong className="text-white">{currentTask?.title}</strong> concepts.
+                                        Your code didn't quite work. Watch this video to help you understand <strong className="text-white">{currentTask?.title}</strong> concepts better.
                                      </p>
                                      <div className="rounded-xl overflow-hidden bg-black aspect-video relative border border-white/10 shadow-inner">
                                          <iframe 

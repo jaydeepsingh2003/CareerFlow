@@ -66,7 +66,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full border border-primary/20 bg-primary/5 text-primary text-[10px] sm:text-xs font-bold uppercase tracking-widest"
           >
             <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-            Smart Career Platform
+            Simple Career Tools
           </motion.div>
 
           <motion.h1
@@ -138,16 +138,16 @@ export default function Home() {
           >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[10px] uppercase font-black text-primary tracking-[0.4em]">Smart Tools for You</span>
+              <span className="text-[10px] uppercase font-black text-primary tracking-[0.4em]">Tools for You</span>
             </div>
             
             <h2 className="text-5xl md:text-7xl font-black text-white leading-none tracking-tighter">
-              YOUR IDENTITY <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">OPTIMIZED.</span>
+              YOUR PERFECT <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">RESUME.</span>
             </h2>
             
             <p className="text-lg text-muted-foreground leading-relaxed max-w-xl font-light">
-              Build a professional resume and a high-quality portfolio in minutes. Our system handles the design and matching to help you get hired faster.
+              Create a professional resume and a beautiful portfolio website in minutes. Our simple tools help you design them and get hired faster.
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
@@ -191,10 +191,10 @@ export default function Home() {
              />
              <div className="absolute inset-x-0 bottom-0 p-12 bg-gradient-to-t from-black via-black/60 to-transparent pt-32">
                 <div className="flex items-center gap-2 mb-4">
-                  <Badge className="bg-primary/20 text-primary border-primary/20 uppercase text-[10px] tracking-widest font-black">AI Powered Platform</Badge>
+                  <Badge className="bg-primary/20 text-primary border-primary/20 uppercase text-[10px] tracking-widest font-black">Easy To Use</Badge>
                 </div>
-                <h3 className="text-3xl font-black text-white leading-tight mb-2">MODERN CAREER DESIGN</h3>
-                <p className="text-gray-400 text-sm font-light mb-6">Build once, use everywhere. Your resume and profile are always in sync.</p>
+                <h3 className="text-3xl font-black text-white leading-tight mb-2">BEAUTIFUL DESIGNS</h3>
+                <p className="text-gray-400 text-sm font-light mb-6">Create it once, use it everywhere. Your resume and website are always up to date.</p>
                 <Link href="/register">
                   <Button className="w-full bg-white text-black hover:bg-gray-200 h-14 rounded-2xl font-black gap-3 text-lg">
                     Build My Profile <Rocket className="h-5 w-5" />
@@ -239,22 +239,22 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
           {[
             {
-              title: "Personal Job Feed",
-              description: "Forget simple searches. Our feed learns your career trajectory and surface roles you actually want.",
+              title: "Smart Job Feed",
+              description: "No more searching for hours. We understand your skills and show you the jobs you actually want.",
               icon: Globe,
               color: "text-blue-400",
               bg: "bg-blue-400/10"
             },
             {
-              title: "Career Score",
-              description: "Direct mapping of your skill identifiers against market benchmarks. Know your value before you apply.",
+              title: "Skill Rating",
+              description: "See how your skills compare to what companies are looking for. Know your value before you apply.",
               icon: Zap,
               color: "text-yellow-400",
               bg: "bg-yellow-400/10"
             },
             {
-              title: "Practice Rooms",
-              description: "AI-simulated interview environments tailored to specific job descriptions. Zero-risk high-gain preparation.",
+              title: "Interview Practice",
+              description: "Practice answering questions with our friendly AI based on real job descriptions. Get confident with zero pressure.",
               icon: Sparkles,
               color: "text-purple-400",
               bg: "bg-purple-400/10"

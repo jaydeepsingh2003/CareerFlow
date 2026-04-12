@@ -24,7 +24,8 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
     { icon: LayoutDashboard, label: "Career Home", href: "/dashboard" },
-    { icon: Target, label: "Skill Sessions", href: "/simulation" },
+    { icon: Target, label: "Practice Tests", href: "/simulation" },
+    { icon: BrainCircuit, label: "AI Interviewer", href: "/interview-studio" },
     { icon: Briefcase, label: "Smart Jobs", href: "/jobs" },
     { icon: Target, label: "Job Matcher", href: "/job-alignment" },
     { icon: BrainCircuit, label: "Skill Tracker", href: "/resume-analysis" },

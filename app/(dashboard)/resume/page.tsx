@@ -17,7 +17,35 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, FileDown, Eye, Save, Sparkles, Printer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+
+// Helper component that forces an A4 (794x1123) container to scale down visually based on its parent's width 
+// This completely fixes mobile overflow for Pixel-Perfect rendering.
+function ScaleWrapper({ children }: { children: React.ReactNode }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [scale, setScale] = useState(1);
+
+    useEffect(() => {
+        const obs = new ResizeObserver((entries) => {
+            if (entries[0]) {
+                const width = entries[0].contentRect.width;
+                // 794px is the exact width of an A4 paper at 96 DPI
+                setScale(width / 794);
+            }
+        });
+        if (containerRef.current) obs.observe(containerRef.current);
+        return () => obs.disconnect();
+    }, []);
+
+    return (
+        <div ref={containerRef} className="w-full overflow-hidden rounded-xl" style={{ height: 1123 * scale }}>
+            <div style={{ width: '794px', height: '1123px', transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+                {children}
+            </div>
+        </div>
+    );
+}
+
 
 export default function ResumeBuilderPage() {
     const { 
@@ -64,9 +92,11 @@ export default function ResumeBuilderPage() {
                         </Button>
                     </div>
 
-                    <div className="flex justify-center bg-black/40 p-12 rounded-[3.5rem] border border-white/5 shadow-inner">
-                        <div className="w-full max-w-[800px] shadow-[0_20px_80px_rgba(0,0,0,0.5)] transform scale-[1.02] transition-transform">
-                            <ResumePreview data={resumeData} template={selectedTemplate} />
+                    <div className="flex justify-center bg-black/40 p-4 md:p-12 rounded-[3.5rem] border border-white/5 shadow-inner">
+                        <div className="w-full max-w-[800px] shadow-[0_20px_80px_rgba(0,0,0,0.5)]">
+                            <ScaleWrapper>
+                                <ResumePreview data={resumeData} template={selectedTemplate} />
+                            </ScaleWrapper>
                         </div>
                     </div>
 
@@ -303,12 +333,14 @@ export default function ResumeBuilderPage() {
                         </div>
                         
                         <div className="flex justify-center p-4">
-                            <div className="w-full max-w-[700px] shadow-[0_30px_100px_rgba(0,0,0,0.6)] transform origin-top transition-transform hover:scale-[1.01]">
-                                <ResumePreview 
-                                    data={resumeData} 
-                                    template={selectedTemplate} 
-                                    className="rounded-sm"
-                                />
+                            <div className="w-full max-w-[700px] shadow-[0_30px_100px_rgba(0,0,0,0.6)]">
+                                <ScaleWrapper>
+                                    <ResumePreview 
+                                        data={resumeData} 
+                                        template={selectedTemplate} 
+                                        className="rounded-sm"
+                                    />
+                                </ScaleWrapper>
                             </div>
                         </div>
                         
