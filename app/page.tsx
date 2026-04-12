@@ -6,9 +6,23 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Briefcase, Globe, Sparkles, Zap, Shield, ChevronRight, Rocket, Cpu, Terminal, FileText, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const { isAuthenticated, user } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#020205] flex items-center justify-center">
+        <div className="h-8 w-8 rounded-lg bg-primary/20 animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#020205] text-white selection:bg-primary/30 selection:text-white font-sans overflow-x-hidden">
