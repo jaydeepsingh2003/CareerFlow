@@ -1,3 +1,4 @@
+console.log("[LIFECYCLE] Vercel index.ts loading starting...");
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
