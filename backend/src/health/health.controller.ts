@@ -25,7 +25,7 @@ export class HealthController {
   check() {
     return this.health.check([
       // Database check (Prisma)
-      () => this.prismaHealth.pingCheck("database", this.prismaService),
+      () => this.prismaHealth.pingCheck("database", this.prismaService as any),
 
       // External service connectivity check (e.g. Ollama if running)
       // () => this.http.pingCheck('ollama', 'http://localhost:11434'),
