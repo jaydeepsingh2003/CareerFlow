@@ -17,10 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background antialiased selection:bg-primary/10 selection:text-primary overflow-x-hidden`}>
-        <Providers>
+      <body className={`${inter.className} min-h-screen bg-background antialiased selection:bg-primary/10 selection:text-primary overflow-x-hidden text-white`}>
           {children}
-        </Providers>
       </body>
     </html>
   );
