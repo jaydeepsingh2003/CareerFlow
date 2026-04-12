@@ -28,12 +28,12 @@ import { JobAlignmentModule } from "./job-alignment/job-alignment.module";
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ThrottlerModule.forRoot([
-      // {
-      //   ttl: 60000,
-      //   limit: 100,
-      // },
+      {
+        ttl: 60000,
+        limit: 100,
+      },
     ]),
-    // GlobalCacheModule,
+    GlobalCacheModule,
     PrismaModule,
     HealthModule,
     AuthModule,

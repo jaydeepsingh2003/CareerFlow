@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware, Logger } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -9,7 +9,7 @@ export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
     const { method, originalUrl } = req;
     const userAgent = req.get("user-agent") || "";
-    const requestId = uuidv4();
+    const requestId = randomUUID();
 
     // Attach request ID to response headers
     res.setHeader("X-Request-ID", requestId);
