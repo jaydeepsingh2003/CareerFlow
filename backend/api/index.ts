@@ -51,11 +51,13 @@ const handler = async (req: any, res: any) => {
 
   try {
     const result = await bootstrap(res);
-    // If result is the response object itself (because we already handled the missing config), just stop
-    if (!result || typeof result === 'function') {
-      if (result) return result(req, res);
-      return;
+    
+    // The express app is a function (req, res)
+    if (typeof result === 'function') {
+      return result(req, res);
     }
+    // If we reach here and it's not a function, bootstrap already handled the response (e.g. missing config)
+    return;
   } catch (error) {
     console.error("[Vercel-Handler] Fatal bootstrap error:", error);
     res.status(500).json({
