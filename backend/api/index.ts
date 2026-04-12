@@ -14,12 +14,19 @@ process.on('uncaughtException', (err) => {
 
 let cachedServer: express.Express;
 
-export const bootstrap = async () => {
+export const bootstrap = async (res?: any) => {
   if (cachedServer) return cachedServer;
 
   // Environment Check
   if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set in Vercel environment variables. Backend cannot start.");
+    if (res) {
+        return res.status(200).json({ 
+            status: "MISSING_CONFIG", 
+            message: "DATABASE_URL is not set in Vercel. Please add it to your Project Settings -> Environment Variables.",
+            instruction: "Get your Service URI from Aiven and add it as DATABASE_URL"
+        });
+    }
+    throw new Error("DATABASE_URL is missing");
   }
 
   const expressApp = express();
@@ -38,13 +45,17 @@ export const bootstrap = async () => {
 
 const handler = async (req: any, res: any) => {
   // Raw Health Check Bypass
-  if (req.url === "/api/health-check-raw") {
+  if (req.url === "/api/health-check-raw" || req.url === "/health-check-raw") {
     return res.status(200).json({ status: "ok", message: "Vercel handler is alive" });
   }
 
   try {
-    const server = await bootstrap();
-    return server(req, res);
+    const result = await bootstrap(res);
+    // If result is the response object itself (because we already handled the missing config), just stop
+    if (!result || typeof result === 'function') {
+      if (result) return result(req, res);
+      return;
+    }
   } catch (error) {
     console.error("[Vercel-Handler] Fatal bootstrap error:", error);
     res.status(500).json({
