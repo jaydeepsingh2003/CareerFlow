@@ -4,10 +4,23 @@ import { ValidationPipe } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
+// Global Exception Handlers for Serverless
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[FATAL] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('[FATAL] Uncaught Exception:', err);
+});
+
 let cachedServer: express.Express;
 
 export const bootstrap = async () => {
   if (cachedServer) return cachedServer;
+
+  // Environment Check
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not set in Vercel environment variables. Backend cannot start.");
+  }
 
   const expressApp = express();
   const app = await NestFactory.create(
