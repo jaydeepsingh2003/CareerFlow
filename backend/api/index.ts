@@ -24,8 +24,22 @@ export const bootstrap = async () => {
 };
 
 const handler = async (req: any, res: any) => {
-  const server = await bootstrap();
-  return server(req, res);
+  // Raw Health Check Bypass
+  if (req.url === "/api/health-check-raw") {
+    return res.status(200).json({ status: "ok", message: "Vercel handler is alive" });
+  }
+
+  try {
+    const server = await bootstrap();
+    return server(req, res);
+  } catch (error) {
+    console.error("[Vercel-Handler] Fatal bootstrap error:", error);
+    res.status(500).json({
+      error: "Internal Server Error during bootstrap",
+      message: error instanceof Error ? error.message : String(error),
+      stack: process.env.NODE_ENV === "development" ? (error as any)?.stack : undefined,
+    });
+  }
 };
 
 export default handler;
